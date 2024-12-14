@@ -8,7 +8,7 @@ function App() {
       <div className="clock_content">
         <h1>We are almost there</h1>
         <h3 className="title">
-          Stay tuned for something amazing with New With Evidence.
+          Stay tuned for something amazing New With Evidence.
         </h3>
         <FlipClockCountdown
           className="flip-clock"
