@@ -1,9 +1,10 @@
 import React from "react";
 import { Home, Image, PlusCircle, User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   const navItems = [
-    { name: "Home", icon: Home },
+    { name: "Home", icon: Home, link: "/" },
     { name: "Gallery", icon: Image },
     { name: "Add Post", icon: PlusCircle },
     { name: "Profile", icon: User },
@@ -15,10 +16,11 @@ const Footer = () => {
         <div className="flex items-center justify-between h-16">
           {navItems.map((item) => {
             const Icon = item.icon;
+            const link = item.link;
             return (
-              <a
+              <Link
                 key={item.name}
-                href="#"
+                to={link}
                 className="flex flex-col items-center justify-between flex-1 py-2"
               >
                 <Icon
@@ -27,7 +29,7 @@ const Footer = () => {
                   }`}
                 />
                 <span className="text-xs mt-1 text-gray-500">{item.name}</span>
-              </a>
+              </Link>
             );
           })}
         </div>
