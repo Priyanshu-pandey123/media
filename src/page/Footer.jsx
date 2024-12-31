@@ -6,8 +6,8 @@ const Footer = () => {
   const navItems = [
     { name: "Home", icon: Home, link: "/" },
     { name: "Gallery", icon: Image },
-    { name: "Add Post", icon: PlusCircle },
-    { name: "Profile", icon: User },
+    { name: "Add Post", icon: PlusCircle, link: "/post" },
+    { name: "Profile", icon: User, link: "/profile" },
   ];
 
   return (
