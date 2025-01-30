@@ -97,5 +97,6 @@
 }
 
 .homeButton {
-  border-radius: 32px;
+  border-radius: 40px;
+  cursor: pointer;
 }

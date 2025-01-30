@@ -11,7 +11,8 @@ const Home = () => {
         <img className="w-auto h-60" src={logo} alt="home image not found" />
         <Link
           to="/auth"
-          className=" font-sans text-center px-3 py-4 bg-blue-500 w-fit mx-auto  homeButton"
+          className=" font-sans text-center text-lg px-7 py-5 bg-blue-500 w-fit mx-auto  
+          homeButton"
         >
           Welcome To News With Evidence{" "}
         </Link>

@@ -1,10 +1,11 @@
 import React from "react";
 import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Head = () => {
+  const navigate = useNavigate();
   const handleBack = () => {
-    // Handle back navigation
-    console.log("Back clicked");
+    navigate(-1);
   };
 
   return (

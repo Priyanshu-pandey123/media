@@ -5,12 +5,13 @@ import ErrorPage from "./page/ErrorPage";
 import Auth from "./page/Auth";
 import Profile from "./page/Profile";
 import Post from "./page/Post";
+import UserList from "./component/UserList";
+import GalleryContainer from "./page/GalleryContainer";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
-    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: <Profile />,
+      },
+      {
+        path: "gallery",
+        element: <GalleryContainer />,
       },
       {
         path: "/post",

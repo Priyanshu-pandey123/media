@@ -3,8 +3,24 @@ import { useForm } from "react-hook-form";
 import logo from "../assets/logo.png";
 import { use } from "react";
 import Head from "../component/Head";
+import { Eye, EyeOff } from "lucide-react";
+import { auth } from "../utils/firebaseApp";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
+import { getDatabase } from "firebase/database";
+import { useNavigate } from "react-router-dom";
+const database = getDatabase();
 
 const Auth = () => {
+  const navigate = useNavigate();
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+  const [isSignIn, setIsSingIn] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const {
     register,
     handleSubmit,
@@ -12,15 +28,47 @@ const Auth = () => {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
-  };
+    if (!isSignIn) {
+      createUserWithEmailAndPassword(auth, data.email, data.password)
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          console.log("User signed up: ", user);
+          if (user) {
+            setSuccess("sucessfulley registered");
 
-  const [isSignIn, setIsSingIn] = useState(false);
+            setIsSingIn(true);
+          }
+
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+
+          console.error("Error creating user: ", error);
+          setError(errorCode);
+          // ..
+        });
+    } else {
+      signInWithEmailAndPassword(auth, data.email, data.password)
+        .then((userCredential) => {
+          const user = userCredential.user;
+          console.log("User signed in: ", user);
+          navigate("/gallery");
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.error("Error signing in: ", errorCode, errorMessage);
+        });
+    }
+  };
 
   return (
     <div>
-      <Head />
-      <div className="container mx-auto p-6 bg-white rounded overflow-y-auto pb-[8rem]">
+      <div className="container  lg:w-[500px] mx-auto p-6 bg-white rounded overflow-y-auto pb-[8rem]">
         <img src={logo} alt="not found" className="h-24 w-auto mx-auto mb-4" />
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div>
@@ -49,7 +97,7 @@ const Auth = () => {
             )}
           </div>
 
-          {isSignIn && (
+          {!isSignIn && (
             <div>
               <label className="block text-gray-700 font-medium">
                 Phone Number
@@ -74,18 +122,31 @@ const Auth = () => {
 
           <div>
             <label className="block text-gray-700 font-medium">Password</label>
-            <input
-              type="password"
-              {...register("password", {
-                required: "Password is required",
-                minLength: {
-                  value: 6,
-                  message: "Password must be at least 6 characters",
-                },
-              })}
-              className="w-full  p-2  border-b border-black"
-              placeholder=" password"
-            />
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                {...register("password", {
+                  required: "Password is required",
+                  minLength: {
+                    value: 6,
+                    message: "Password must be at least 6 characters",
+                  },
+                })}
+                className="w-full p-2 border-b border-black pr-10"
+                placeholder="Password"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              >
+                {showPassword ? (
+                  <EyeOff className="h-5 w-5" />
+                ) : (
+                  <Eye className="h-5 w-5" />
+                )}
+              </button>
+            </div>
             {errors.password && (
               <p className="text-red-500 text-sm">{errors.password.message}</p>
             )}
@@ -120,16 +181,23 @@ const Auth = () => {
             )}
           </div>
 
-          <div className="flex justify-center mt-5">
+          <div className="flex justify-center flex-col mt-5">
             <button
               type="submit"
-              className="bg-blue-500 text-white py-2 px-6 rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              className="bg-blue-500 text-white py-2 px-6 w-fit m-auto rounded-full hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            >
+              {!isSignIn ? "Sign Up" : "Sign In"}
+            </button>
+            <p
+              className="text-center mt-4 cursor-pointer font-medium"
               onClick={() => setIsSingIn(!isSignIn)}
             >
-              {isSignIn ? "Sign Up" : "Sign In"}
-            </button>
+              {!isSignIn ? "Already Have a Account ? " : "Create a new account"}
+            </p>
           </div>
         </form>
+        <p className="text-center text-red-500 mt-2 text-lg">{error}</p>
+        <p className="text-center text-green-600 mt-2 text-lg">{success}</p>
       </div>
     </div>
   );
