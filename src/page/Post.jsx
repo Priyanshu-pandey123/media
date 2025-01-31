@@ -3,6 +3,58 @@ import ImageUpload from "../component/ImageUpload";
 import EditorToolbar from "../component/EditorToolBar";
 import FormInput from "../component/FormInput";
 import Head from "../component/Head";
+import { db, storage } from "../utils/firebaseApp"; // Assuming you've exported your Firebase instances
+import { collection, addDoc, serverTimestamp } from "firebase/firestore"; // Firestore methods
+import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  try {
+    const imageUrls = [];
+
+    // Upload the selected images to Firebase Storage
+    const storageRef = ref(storage, "images"); // Define a folder for the images in Firebase Storage
+
+    // Loop through selected images and upload them
+    for (const file of selectedImages) {
+      const imageRef = ref(storage, `images/${file.name}`);
+      await uploadBytes(imageRef, file); // Upload the image
+
+      // After the image is uploaded, get the download URL
+      const fileUrl = await getDownloadURL(imageRef);
+      imageUrls.push(fileUrl); // Store the URL
+    }
+
+    // Now, create the post object with all data, including the image URLs
+    const post = {
+      heading: formData.heading,
+      tag: formData.tag,
+      category: formData.category,
+      videoLink: formData.videoLink,
+      content: formData.content,
+      images: imageUrls, // Store the image URLs
+      createdAt: serverTimestamp(), // Timestamp for when the post was created
+    };
+
+    // Add the post to Firestore
+    const postsCollection = collection(db, "posts");
+    await addDoc(postsCollection, post); // Save the post to Firestore
+
+    console.log("Post added to Firestore:", post);
+
+    // Reset form after submission
+    setFormData({
+      heading: "",
+      tag: "",
+      category: "",
+      videoLink: "",
+      content: "",
+    });
+    setSelectedImages([]);
+  } catch (error) {
+    console.error("Error adding post to Firestore:", error);
+  }
+};
 
 const PostForm = () => {
   const [formData, setFormData] = useState({
@@ -22,12 +74,61 @@ const PostForm = () => {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  // const handleSubmit = (e) => {
+  //   e.preventDefault();
+  //   console.log("Form submitted:", {
+  //     ...formData,
+  //     images: selectedImages,
+  //   });
+  // };
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form submitted:", {
-      ...formData,
-      images: selectedImages,
-    });
+
+    try {
+      const imageUrls = [];
+
+      // Upload the selected images to Firebase Storage
+      const storageRef = ref(storage, "images"); // Define a folder for the images in Firebase Storage
+
+      // Loop through selected images and upload them
+      for (const file of selectedImages) {
+        const imageRef = ref(storage, `images/${file.name}`);
+        await uploadBytes(imageRef, file); // Upload the image
+
+        // After the image is uploaded, get the download URL
+        const fileUrl = await getDownloadURL(imageRef);
+        imageUrls.push(fileUrl); // Store the URL
+      }
+
+      // Now, create the post object with all data, including the image URLs
+      const post = {
+        heading: formData.heading,
+        tag: formData.tag,
+        category: formData.category,
+        videoLink: formData.videoLink,
+        content: formData.content,
+        images: imageUrls, // Store the image URLs
+        createdAt: serverTimestamp(), // Timestamp for when the post was created
+      };
+
+      // Add the post to Firestore
+      const postsCollection = collection(db, "posts");
+      await addDoc(postsCollection, post); // Save the post to Firestore
+
+      console.log("Post added to Firestore:", post);
+
+      // Reset form after submission
+      setFormData({
+        heading: "",
+        tag: "",
+        category: "",
+        videoLink: "",
+        content: "",
+      });
+      setSelectedImages([]);
+    } catch (error) {
+      console.error("Error adding post to Firestore:", error);
+    }
   };
 
   return (

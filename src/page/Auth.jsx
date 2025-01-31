@@ -4,11 +4,12 @@ import logo from "../assets/logo.png";
 import { use } from "react";
 import Head from "../component/Head";
 import { Eye, EyeOff } from "lucide-react";
-import { auth } from "../utils/firebaseApp";
+import { auth, db } from "../utils/firebaseApp";
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from "firebase/auth";
+import { doc, setDoc, getDoc } from "firebase/firestore";
 import { getDatabase } from "firebase/database";
 import { useNavigate } from "react-router-dom";
 const database = getDatabase();
@@ -27,42 +28,70 @@ const Auth = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
+    setError(""); // Reset errors before submitting
+    setSuccess("");
+
     if (!isSignIn) {
-      createUserWithEmailAndPassword(auth, data.email, data.password)
-        .then((userCredential) => {
-          // Signed up
-          const user = userCredential.user;
-          console.log("User signed up: ", user);
-          if (user) {
-            setSuccess("sucessfulley registered");
+      try {
+        // Create user with email and password
+        const userCredential = await createUserWithEmailAndPassword(
+          auth,
+          data.email,
+          data.password
+        );
+        const user = userCredential.user;
 
-            setIsSingIn(true);
-          }
+        // console.log("User signed up: ", user);
 
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
+        if (!user?.uid) {
+          throw new Error("User ID is undefined");
+        }
 
-          console.error("Error creating user: ", error);
-          setError(errorCode);
-          // ..
+        // Store user data in Firestore
+        await setDoc(doc(db, "users", user.uid), {
+          username: data.username,
+          email: data.email,
+          phone: data.number,
+          role: data.role,
+          createdAt: new Date(),
         });
+
+        // console.log("User data stored in Firestore");
+
+        // Success message and UI updates
+        setSuccess("Successfully registered! ");
+        setTimeout(() => {
+          // console.log("In time interval");
+          setIsSingIn(true);
+          setSuccess("");
+          reset();
+        }, 1000);
+      } catch (error) {
+        // console.error("Error creating user:", error);
+        setError(error.message || "Failed to create account. Try again.");
+      }
     } else {
-      signInWithEmailAndPassword(auth, data.email, data.password)
-        .then((userCredential) => {
-          const user = userCredential.user;
-          console.log("User signed in: ", user);
+      try {
+        // Sign in user
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          data.email,
+          data.password
+        );
+        const user = userCredential.user;
+
+        console.log("User signed in: ", user);
+        setSuccess("Successfully logged in! Redirecting...");
+
+        setTimeout(() => {
           navigate("/gallery");
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.error("Error signing in: ", errorCode, errorMessage);
-        });
+          setSuccess("");
+        }, 1000);
+      } catch (error) {
+        // console.error("Error signing in:", error);
+        setError("Invalid email or password. Please try again.");
+      }
     }
   };
 
@@ -196,8 +225,12 @@ const Auth = () => {
             </p>
           </div>
         </form>
-        <p className="text-center text-red-500 mt-2 text-lg">{error}</p>
-        <p className="text-center text-green-600 mt-2 text-lg">{success}</p>
+        {error && (
+          <p className="text-center text-red-500 mt-2 text-lg">{error}</p>
+        )}
+        {success && (
+          <p className="text-center text-green-600 mt-2 text-lg">{success}</p>
+        )}
       </div>
     </div>
   );
