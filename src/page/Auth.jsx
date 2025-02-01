@@ -28,47 +28,114 @@ const Auth = () => {
     formState: { errors },
   } = useForm();
 
+  //   setError(""); // Reset errors before submitting
+  //   setSuccess("");
+
+  //   if (!isSignIn) {
+  //     try {
+  //       // Create user with email and password
+  //       const userCredential = await createUserWithEmailAndPassword(
+  //         auth,
+  //         data.email,
+  //         data.password
+  //       );
+  //       const user = userCredential.user;
+
+  //       // console.log("User signed up: ", user);
+
+  //       if (!user?.uid) {
+  //         throw new Error("User ID is undefined");
+  //       }
+
+  //       // Store user data in Firestore
+  //       await setDoc(doc(db, "users", user.uid), {
+  //         username: data.username,
+  //         email: data.email,
+  //         phone: data.number,
+  //         role: data.role,
+  //         createdAt: new Date(),
+  //       });
+
+  //       console.log("User data stored in Firestore");
+
+  //       // Success message and UI updates
+  //       setSuccess("Successfully registered! ");
+  //       setIsSingIn(true);
+  //       setSuccess("");
+  //       reset();
+  //     } catch (error) {
+  //       // console.error("Error creating user:", error);
+  //       setError(error.message || "Failed to create account. Try again.");
+  //     }
+  //   } else {
+  //     try {
+  //       // Sign in user
+  //       const userCredential = await signInWithEmailAndPassword(
+  //         auth,
+  //         data.email,
+  //         data.password
+  //       );
+  //       const user = userCredential.user;
+
+  //       console.log("User signed in: ", user);
+  //       setSuccess("Successfully logged in! Redirecting...");
+
+  //       setTimeout(() => {
+  //         navigate("/gallery");
+  //         setSuccess("");
+  //       }, 1000);
+  //     } catch (error) {
+  //       // console.error("Error signing in:", error);
+  //       setError("Invalid email or password. Please try again.");
+  //     }
+  //   }
+  // };
   const onSubmit = async (data) => {
-    setError(""); // Reset errors before submitting
+    setError("");
     setSuccess("");
 
     if (!isSignIn) {
       try {
-        // Create user with email and password
         const userCredential = await createUserWithEmailAndPassword(
           auth,
           data.email,
           data.password
         );
         const user = userCredential.user;
-
-        // console.log("User signed up: ", user);
+        // console.log(user, "form sign up user");
 
         if (!user?.uid) {
           throw new Error("User ID is undefined");
         }
-
+        console.log(user?.uid);
         // Store user data in Firestore
-        await setDoc(doc(db, "users", user.uid), {
-          username: data.username,
-          email: data.email,
-          phone: data.number,
-          role: data.role,
-          createdAt: new Date(),
-        });
+        try {
+          await setDoc(doc(db, "users", user.uid), {
+            username: data.username,
+            email: data.email,
+            phone: data.number,
+            role: data.role,
+            createdAt: new Date(),
+          });
 
-        // console.log("User data stored in Firestore");
+          console.log("User data stored in Firestore"); // This should now work
+        } catch (firestoreError) {
+          console.error(
+            "Error storing user data in Firestore:",
+            firestoreError
+          );
+          setError("Failed to store user data in Firestore.");
+          return; // Early return to prevent further code execution
+        }
 
         // Success message and UI updates
-        setSuccess("Successfully registered! ");
+        setSuccess("Successfully registered!");
         setTimeout(() => {
-          // console.log("In time interval");
           setIsSingIn(true);
           setSuccess("");
-          reset();
-        }, 1000);
+        }, 500);
       } catch (error) {
-        // console.error("Error creating user:", error);
+        console.error("Error creating user:", error);
         setError(error.message || "Failed to create account. Try again.");
       }
     } else {
@@ -80,16 +147,28 @@ const Auth = () => {
           data.password
         );
         const user = userCredential.user;
+        if (!user?.uid) {
+          throw new Error("User ID is undefined");
+        }
+        const userDoc = await getDoc(doc(db, "users", user.uid));
 
-        console.log("User signed in: ", user);
+        if (!userDoc.exists()) {
+          throw new Error("User data not found in Firestore.");
+        }
+        const userData = userDoc.data();
+        console.log("Fetched user data:", userData, data);
+        if (userData.role != data.role) {
+          console.log("different role");
+          setError("Login with Your Role");
+          return;
+        }
         setSuccess("Successfully logged in! Redirecting...");
-
         setTimeout(() => {
           navigate("/gallery");
           setSuccess("");
-        }, 1000);
+        }, 500);
       } catch (error) {
-        // console.error("Error signing in:", error);
+        console.error("Error signing in:", error);
         setError("Invalid email or password. Please try again.");
       }
     }
@@ -189,7 +268,7 @@ const Auth = () => {
               <label className="flex items-center space-x-2 mt-5">
                 <input
                   type="radio"
-                  value="Visitor"
+                  value="Reporter"
                   {...register("role", { required: "Role is required" })}
                   className="w-[30px] h-[30px]"
                 />

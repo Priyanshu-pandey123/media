@@ -1,6 +1,7 @@
 {
   "projects": {
-    "media": "media-2b03f"
+    "media": "media-2b03f",
+    "default": "media-2b03f"
   },
   "targets": {},
   "etags": {}

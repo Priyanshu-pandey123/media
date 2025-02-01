@@ -6,6 +6,7 @@ import Head from "../component/Head";
 import { db, storage } from "../utils/firebaseApp"; // Assuming you've exported your Firebase instances
 import { collection, addDoc, serverTimestamp } from "firebase/firestore"; // Firestore methods
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
+
 const handleSubmit = async (e) => {
   e.preventDefault();
 
