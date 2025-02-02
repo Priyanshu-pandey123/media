@@ -7,6 +7,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { auth, db } from "../utils/firebaseApp";
 import {
   createUserWithEmailAndPassword,
+  fetchSignInMethodsForEmail,
   signInWithEmailAndPassword,
 } from "firebase/auth";
 import { doc, setDoc, getDoc } from "firebase/firestore";
@@ -28,68 +29,6 @@ const Auth = () => {
     formState: { errors },
   } = useForm();
 
-  //   setError(""); // Reset errors before submitting
-  //   setSuccess("");
-
-  //   if (!isSignIn) {
-  //     try {
-  //       // Create user with email and password
-  //       const userCredential = await createUserWithEmailAndPassword(
-  //         auth,
-  //         data.email,
-  //         data.password
-  //       );
-  //       const user = userCredential.user;
-
-  //       // console.log("User signed up: ", user);
-
-  //       if (!user?.uid) {
-  //         throw new Error("User ID is undefined");
-  //       }
-
-  //       // Store user data in Firestore
-  //       await setDoc(doc(db, "users", user.uid), {
-  //         username: data.username,
-  //         email: data.email,
-  //         phone: data.number,
-  //         role: data.role,
-  //         createdAt: new Date(),
-  //       });
-
-  //       console.log("User data stored in Firestore");
-
-  //       // Success message and UI updates
-  //       setSuccess("Successfully registered! ");
-  //       setIsSingIn(true);
-  //       setSuccess("");
-  //       reset();
-  //     } catch (error) {
-  //       // console.error("Error creating user:", error);
-  //       setError(error.message || "Failed to create account. Try again.");
-  //     }
-  //   } else {
-  //     try {
-  //       // Sign in user
-  //       const userCredential = await signInWithEmailAndPassword(
-  //         auth,
-  //         data.email,
-  //         data.password
-  //       );
-  //       const user = userCredential.user;
-
-  //       console.log("User signed in: ", user);
-  //       setSuccess("Successfully logged in! Redirecting...");
-
-  //       setTimeout(() => {
-  //         navigate("/gallery");
-  //         setSuccess("");
-  //       }, 1000);
-  //     } catch (error) {
-  //       // console.error("Error signing in:", error);
-  //       setError("Invalid email or password. Please try again.");
-  //     }
-  //   }
-  // };
   const onSubmit = async (data) => {
     setError("");
     setSuccess("");
@@ -102,7 +41,6 @@ const Auth = () => {
           data.password
         );
         const user = userCredential.user;
-        // console.log(user, "form sign up user");
 
         if (!user?.uid) {
           throw new Error("User ID is undefined");
@@ -128,7 +66,6 @@ const Auth = () => {
           return; // Early return to prevent further code execution
         }
 
-        // Success message and UI updates
         setSuccess("Successfully registered!");
         setTimeout(() => {
           setIsSingIn(true);
