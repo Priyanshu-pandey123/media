@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { ImagePlus, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 
 const ImageUpload = ({ onImageSelect }) => {
   const fileInputRef = useRef(null);
@@ -11,6 +11,7 @@ const ImageUpload = ({ onImageSelect }) => {
   const handleFileChange = (e) => {
     if (e.target.files && e.target.files.length > 0) {
       onImageSelect(e.target.files);
+      e.target.value = ""; // Reset input field after selecting files
     }
   };
 

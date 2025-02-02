@@ -3,6 +3,7 @@ import baseImage from "../assets/new.jpeg";
 import logo from "../assets/logo.png";
 
 import { Link } from "react-router-dom";
+import GalleryNav from "../component/GalleryNAv";
 
 const Home = () => {
   return (

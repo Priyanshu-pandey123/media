@@ -1,61 +1,11 @@
-import React, { useState } from "react";
-import ImageUpload from "../component/ImageUpload";
-import EditorToolbar from "../component/EditorToolBar";
-import FormInput from "../component/FormInput";
-import Head from "../component/Head";
-import { db, storage } from "../utils/firebaseApp"; // Assuming you've exported your Firebase instances
-import { collection, addDoc, serverTimestamp } from "firebase/firestore"; // Firestore methods
+import React, { useState, useRef } from "react";
+import { db, storage } from "../utils/firebaseApp";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-
-  try {
-    const imageUrls = [];
-
-    // Upload the selected images to Firebase Storage
-    const storageRef = ref(storage, "images"); // Define a folder for the images in Firebase Storage
-
-    // Loop through selected images and upload them
-    for (const file of selectedImages) {
-      const imageRef = ref(storage, `images/${file.name}`);
-      await uploadBytes(imageRef, file); // Upload the image
-
-      // After the image is uploaded, get the download URL
-      const fileUrl = await getDownloadURL(imageRef);
-      imageUrls.push(fileUrl); // Store the URL
-    }
-
-    // Now, create the post object with all data, including the image URLs
-    const post = {
-      heading: formData.heading,
-      tag: formData.tag,
-      category: formData.category,
-      videoLink: formData.videoLink,
-      content: formData.content,
-      images: imageUrls, // Store the image URLs
-      createdAt: serverTimestamp(), // Timestamp for when the post was created
-    };
-
-    // Add the post to Firestore
-    const postsCollection = collection(db, "posts");
-    await addDoc(postsCollection, post); // Save the post to Firestore
-
-    console.log("Post added to Firestore:", post);
-
-    // Reset form after submission
-    setFormData({
-      heading: "",
-      tag: "",
-      category: "",
-      videoLink: "",
-      content: "",
-    });
-    setSelectedImages([]);
-  } catch (error) {
-    console.error("Error adding post to Firestore:", error);
-  }
-};
+import ImageUpload from "../component/ImageUpload";
+import FormInput from "../component/FormInput";
+import EditorToolbar from "../component/EditorToolBar";
+import Head from "../component/Head";
 
 const PostForm = () => {
   const [formData, setFormData] = useState({
@@ -65,60 +15,54 @@ const PostForm = () => {
     videoLink: "",
     content: "",
   });
+
   const [selectedImages, setSelectedImages] = useState([]);
 
   const handleImageSelect = (files) => {
-    setSelectedImages(Array.from(files));
+    setSelectedImages((prevImages) => [...prevImages, ...Array.from(files)]);
   };
 
   const handleInputChange = (field) => (e) => {
     setFormData({ ...formData, [field]: e.target.value });
   };
 
-  // const handleSubmit = (e) => {
-  //   e.preventDefault();
-  //   console.log("Form submitted:", {
-  //     ...formData,
-  //     images: selectedImages,
-  //   });
-  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const imageUrls = [];
-
-      // Upload the selected images to Firebase Storage
-      const storageRef = ref(storage, "images"); // Define a folder for the images in Firebase Storage
-
-      // Loop through selected images and upload them
-      for (const file of selectedImages) {
-        const imageRef = ref(storage, `images/${file.name}`);
-        await uploadBytes(imageRef, file); // Upload the image
-
-        // After the image is uploaded, get the download URL
-        const fileUrl = await getDownloadURL(imageRef);
-        imageUrls.push(fileUrl); // Store the URL
+      if (selectedImages.length === 0) {
+        alert("Please select at least one image.");
+        return;
       }
 
-      // Now, create the post object with all data, including the image URLs
+      const imageUrls = [];
+
+      // Upload images to Firebase Storage
+      for (const file of selectedImages) {
+        const imageRef = ref(storage, `images/${file.name}`);
+        await uploadBytes(imageRef, file); // Upload the file
+
+        // ✅ Correct way to get the download URL
+        const fileUrl = await getDownloadURL(imageRef);
+        console.log("Uploaded file URL:", fileUrl); // Debugging
+        imageUrls.push(fileUrl);
+      }
+
+      // Save data to Firestore
       const post = {
         heading: formData.heading,
         tag: formData.tag,
         category: formData.category,
         videoLink: formData.videoLink,
         content: formData.content,
-        images: imageUrls, // Store the image URLs
-        createdAt: serverTimestamp(), // Timestamp for when the post was created
+        images: imageUrls,
+        createdAt: serverTimestamp(),
       };
 
-      // Add the post to Firestore
-      const postsCollection = collection(db, "posts");
-      await addDoc(postsCollection, post); // Save the post to Firestore
+      await addDoc(collection(db, "posts"), post);
+      console.log("Post added:", post);
 
-      console.log("Post added to Firestore:", post);
-
-      // Reset form after submission
+      // Reset form
       setFormData({
         heading: "",
         tag: "",
@@ -128,7 +72,7 @@ const PostForm = () => {
       });
       setSelectedImages([]);
     } catch (error) {
-      console.error("Error adding post to Firestore:", error);
+      console.error("Error uploading post:", error);
     }
   };
 
@@ -154,41 +98,21 @@ const PostForm = () => {
             value={formData.heading}
             onChange={handleInputChange("heading")}
           />
-
           <FormInput
             placeholder="Add Tag"
             value={formData.tag}
             onChange={handleInputChange("tag")}
           />
-
           <FormInput
             placeholder="Category"
             value={formData.category}
             onChange={handleInputChange("category")}
           />
-
-          <div className="relative">
-            <FormInput
-              placeholder="Add Video Link"
-              value={formData.videoLink}
-              onChange={handleInputChange("videoLink")}
-            />
-            <div className="absolute inset-y-0 right-0 flex items-center pr-3">
-              <svg
-                className="w-4 h-4 text-gray-400"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M19 9l-7 7-7-7"
-                />
-              </svg>
-            </div>
-          </div>
+          <FormInput
+            placeholder="Add Video Link"
+            value={formData.videoLink}
+            onChange={handleInputChange("videoLink")}
+          />
 
           <div className="border border-gray-300 rounded-lg">
             <EditorToolbar />

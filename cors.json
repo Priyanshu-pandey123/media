@@ -1,8 +1,8 @@
 [
   {
-    "origin": ["http://localhost:3000"], 
-    "responseHeader": ["Content-Type"],
-    "method": ["GET", "POST", "OPTIONS"],
+    "origin": ["*"],
+    "method": ["GET", "POST", "PUT", "DELETE"],
+    "responseHeader": ["Content-Type", "Authorization"],
     "maxAgeSeconds": 3600
   }
 ]
