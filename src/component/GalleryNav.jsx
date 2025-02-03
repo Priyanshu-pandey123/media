@@ -1,61 +1,58 @@
-import React from "react";
-import { auth } from "../utils/firebaseApp";
-import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { Menu, Bell } from "lucide-react";
+import LocationSelector from "../component/LocationSelector";
+import SearchBar from "../component/SearchBar";
+import TabBar from "../component/TabBar";
+import MenuDrawer from "../component/MenuDrawer";
 
-const GalleryNav = () => {
-  const navigate = useNavigate();
-  const handleSignOut = async () => {
-    try {
-      await signOut(auth);
-      navigate("/"); // Redirect to the login page
-    } catch (error) {
-      console.error("Error signing out:", error.message);
-    }
-  };
+export default function GalleryNav({
+  isMenuOpen,
+  setIsMenuOpen,
+  selectedLocation,
+  setSelectedLocation,
+  isLocationOpen,
+  setIsLocationOpen,
+  searchQuery,
+  setSearchQuery,
+  activeTab,
+  setActiveTab,
+}) {
   return (
-    <nav className="bg-white shadow-md fixed w-full top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between h-16 items-center">
-          {/* Logo or Brand Name */}
-          <div className="flex-shrink-0">
-            <span className="text-xl font-bold text-gray-800">
-              News With Evidence
-            </span>
-          </div>
+    <>
+      <header className="bg-white shadow-md">
+        <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-          {/* Search Bar */}
-          <div className="flex-1 mx-4">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="w-full max-w-md px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
-          </div>
-
-          {/* Profile and Sign Out */}
-          <div className="flex items-center space-x-4">
-            {/* Profile Picture */}
-            <div className="relative">
-              <img
-                src="https://i.pravatar.cc/150?img=1"
-                alt="Profile"
-                className="w-10 h-10 rounded-full cursor-pointer"
+        <div className="container mx-auto px-4 py-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <button
+                onClick={() => setIsMenuOpen(true)}
+                className="text-gray-600 hover:text-gray-800"
+              >
+                <Menu size={24} />
+              </button>
+              <LocationSelector
+                selectedLocation={selectedLocation}
+                setSelectedLocation={setSelectedLocation}
+                isLocationOpen={isLocationOpen}
+                setIsLocationOpen={setIsLocationOpen}
               />
             </div>
 
-            {/* Sign Out Button */}
-            <button
-              onClick={handleSignOut}
-              className="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500"
-            >
-              Sign Out
-            </button>
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center bg-yellow-100 px-3 py-1 rounded-full">
+                <span className="text-yellow-600 font-medium">599</span>
+              </div>
+              <Bell size={24} className="text-gray-600" />
+            </div>
           </div>
-        </div>
-      </div>
-    </nav>
-  );
-};
 
-export default GalleryNav;
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+        </div>
+      </header>
+      <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
+    </>
+  );
+}
