@@ -1,8 +1,34 @@
-const tabs = ["Popular", "All", "Politics", "Tech", "Healthy", "Science"];
+import { useDispatch } from "react-redux";
+import { currentTab } from "../store/gallerySlice";
 
-export default function TabBar({ activeTab, setActiveTab }) {
+const tabs = [
+  "Popular",
+  "All",
+  "Videos",
+  "Politics",
+  "Tech",
+  "Healthy",
+  "Science",
+];
+
+export default function TabBar({
+  activeTab,
+  setActiveTab,
+  isVideo,
+  setIsVideo,
+}) {
+  const dispatch = useDispatch();
+  const handleCLick = (tab) => {
+    dispatch(currentTab(tab));
+    if (tab == "Videos") {
+      setIsVideo(false);
+    } else {
+      setIsVideo(true);
+    }
+  };
+
   return (
-    <div className="container mx-auto px-4 overflow-x-auto hide-scrollbar">
+    <div className="container mt-5 my-auto px-4 overflow-x-auto hide-scrollbar">
       <div className="flex space-x-6 py-2">
         {tabs.map((tab) => (
           <button
@@ -14,7 +40,9 @@ export default function TabBar({ activeTab, setActiveTab }) {
                 : "text-gray-600 hover:text-gray-800"
             }`}
           >
-            <span className="text-xl">{tab}</span>
+            <span className="text-xl" onClick={() => handleCLick(tab)}>
+              {tab}
+            </span>
           </button>
         ))}
       </div>

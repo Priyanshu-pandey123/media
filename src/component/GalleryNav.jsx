@@ -15,6 +15,8 @@ export default function GalleryNav({
   setSearchQuery,
   activeTab,
   setActiveTab,
+  isVideo,
+  setIsVideo,
 }) {
   return (
     <>
@@ -52,7 +54,12 @@ export default function GalleryNav({
           />
         </div>
       </header>
-      <TabBar activeTab={activeTab} setActiveTab={setActiveTab} />
+      <TabBar
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isVideo={isVideo}
+        setIsVideo={setIsVideo}
+      />
     </>
   );
 }
