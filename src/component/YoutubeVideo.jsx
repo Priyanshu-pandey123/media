@@ -1,21 +1,22 @@
-import React from "react";
 
 const videoIds = [
-  "oSvF4atqVW0",
-  "cJvEN_nqFCo",
-  "AeD8OGEKJNY",
-  "FOrZHPNc-pc",
-  "U_iFxRmOCdo",
+  "w4vdcwQzRZA",
+  "_D7MGFRNtUE",
+  "g26WLLGkxus",
+  "x3orkqvcwdc",
+  "w4vdcwQzRZA",
+  "_D7MGFRNtUE",
+  "g26WLLGkxus",
+  "ARfPginzTco",
 ];
-
 const YoutubeVideo = () => {
   return (
-    <div className="flex flex-wrap justify-center  items-center p-10">
+    <div className="flex flex-wrap justify-center  items-center pb-5">
       {videoIds.map((videoId) => (
         <div key={videoId} className="m-2">
           <iframe
-            width="500"
-            height="315"
+            width="400"
+            height="225"
             src={`https://www.youtube.com/embed/${videoId}`}
             title={`YouTube video player - ${videoId}`}
             frameBorder="0"

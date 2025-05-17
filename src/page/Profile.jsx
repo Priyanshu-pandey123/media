@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Camera, User, Lock, Phone } from "lucide-react";
 import Head from "../component/Head";
 

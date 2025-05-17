@@ -1,8 +1,8 @@
-import React from "react";
-import { X, LogOut, User, Settings, HelpCircle } from "lucide-react";
+
+import { X, LogOut, User, Settings, HelpCircle, } from "lucide-react";
 import { auth } from "../utils/firebaseApp";
 import { signOut } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const MenuDrawer = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
@@ -38,10 +38,12 @@ const MenuDrawer = ({ isOpen, onClose }) => {
             </div>
 
             <div className="py-4">
-              <button className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100">
+              <Link
+                to="/profile"
+                className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100">
                 <User size={20} className="text-gray-600" />
                 <span>Profile</span>
-              </button>
+              </Link>
 
               <button className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100">
                 <Settings size={20} className="text-gray-600" />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { posts } from "../utils/post";
 import { Gallery } from "../component/Gallery";
 import Footer from "./Footer";
@@ -7,11 +7,11 @@ import YoutubeVideo from "../component/YoutubeVideo";
 
 const GalleryContainer = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isVideo, setIsVideo] = useState(true);
-  const [selectedLocation, setSelectedLocation] = useState("G.T Road, Kolkata");
+  const [isVideo, setIsVideo] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState("Sector-52, Noida");
   const [isLocationOpen, setIsLocationOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState("Popular");
+  const [activeTab, setActiveTab] = useState("Videos");
 
   return (
     <div className="min-h-screen bg-gray-100">

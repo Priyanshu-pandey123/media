@@ -23,7 +23,7 @@ export default function GalleryNav({
       <header className="bg-white shadow-md">
         <MenuDrawer isOpen={isMenuOpen} onClose={() => setIsMenuOpen(false)} />
 
-        <div className="container mx-auto px-4 py-3">
+        <div className="container mx-auto px-4 py-2">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <button
@@ -47,11 +47,6 @@ export default function GalleryNav({
               <Bell size={24} className="text-gray-600" />
             </div>
           </div>
-
-          <SearchBar
-            searchQuery={searchQuery}
-            setSearchQuery={setSearchQuery}
-          />
         </div>
       </header>
       <TabBar

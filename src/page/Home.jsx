@@ -11,7 +11,7 @@ const Home = () => {
       <div className="max-w-screen h-screen flex justify-center items-cente flex-col">
         <img className="w-auto h-60" src={logo} alt="home image not found" />
         <Link
-          to="/auth"
+          to="/gallery"
           className=" font-sans text-center text-lg px-7 py-5 bg-blue-500 w-fit mx-auto  
           homeButton"
         >

@@ -1,11 +1,11 @@
 import { FaMapMarkerAlt, FaChevronDown } from "react-icons/fa";
 
 const locations = [
-  "G.T Road, Kolkata",
-  "Park Street, Kolkata",
-  "Salt Lake, Kolkata",
-  "Howrah, West Bengal",
-  "New Town, Kolkata",
+  "Sector-18, Noida",
+  "Sector-16, Noida",
+  "Sector-15, Noida",
+  "Sector-14, Noida",
+  "Sector-13, Noida",
 ];
 
 export default function LocationSelector({
