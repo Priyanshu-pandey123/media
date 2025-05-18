@@ -7,7 +7,7 @@ import Profile from "./page/Profile";
 import Post from "./page/Post";
 import UserList from "./component/UserList";
 import GalleryContainer from "./page/GalleryContainer";
-
+import AboutUs from "./page/AboutUs";
 const router = createBrowserRouter([
   {
     path: "/",
@@ -28,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "gallery",
         element: <GalleryContainer />,
+      },
+      {
+        path: "about-us",
+        element: <AboutUs />,
       },
       {
         path: "/post",

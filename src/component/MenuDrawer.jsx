@@ -24,7 +24,7 @@ const MenuDrawer = ({ isOpen, onClose }) => {
             className="absolute inset-0 bg-black bg-opacity-50"
             onClick={onClose}
           />
-          <div className="absolute left-0 top-0 h-fit p-6 w-80 bg-white shadow-lg">
+          <div className="absolute left-0 top-0 bottom-0 h-fit p-6 w-60 bg-white shadow-lg">
             <div className="p-4 border-b">
               <div className="flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Menu</h2>
@@ -54,15 +54,21 @@ const MenuDrawer = ({ isOpen, onClose }) => {
                 <HelpCircle size={20} className="text-gray-600" />
                 <span>Help & Support</span>
               </button>
+              <Link
+                to="/about-us"
+                className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100">
+                <User size={20} className="text-gray-600" />
+                <span>About Us</span>
+              </Link>
 
               <div className="border-t mt-2">
-                <button
+                {/* <button
                   onClick={handleLogout}
                   className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100 text-red-600"
                 >
                   <LogOut size={20} />
                   <span>Logout</span>
-                </button>
+                </button> */}
               </div>
             </div>
           </div>

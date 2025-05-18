@@ -1,4 +1,3 @@
-import React from "react";
 
 const FormInput = ({ placeholder, value, onChange }) => {
   return (
