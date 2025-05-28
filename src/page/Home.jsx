@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReactPlayer from 'react-player';
-import { Home, TrendingUp as Trending, Subscript as Subscriptions, History, Library as VideoLibrary, Clock, ThumbsUp, Search, Menu, Bell, User } from 'lucide-react';
+import { Home, TrendingUp, Subscript, History, Library, Menu, Bell, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import { auth, db } from "../utils/firebaseApp";
 import { collection, addDoc } from "firebase/firestore";
 
@@ -9,6 +9,7 @@ const HomePage = () => {
   const [showSubscription, setShowSubscription] = useState(false);
   const [videoStartTime, setVideoStartTime] = useState(null);
   const [selectedPlan, setSelectedPlan] = useState(null);
+  const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
   const videos = [
     {
@@ -26,8 +27,7 @@ const HomePage = () => {
       channel: 'Local News',
       views: '500K views',
       timestamp: '5 hours ago'
-    },
-    // Add more videos as needed
+    }
   ];
 
   const subscriptionPlans = [
@@ -51,8 +51,8 @@ const HomePage = () => {
 
   const handleVideoProgress = () => {
     if (videoStartTime && !showSubscription) {
-      const timeWatched = (Date.now() - videoStartTime) / 1000; // Convert to seconds
-      if (timeWatched > 120) { // 2 minutes
+      const timeWatched = (Date.now() - videoStartTime) / 1000;
+      if (timeWatched > 120) {
         setShowSubscription(true);
       }
     }
@@ -61,7 +61,6 @@ const HomePage = () => {
   const handleSubscribe = async (planId) => {
     try {
       if (!auth.currentUser) {
-        // Redirect to login if not authenticated
         return;
       }
 
@@ -86,19 +85,13 @@ const HomePage = () => {
       <header className="bg-white shadow-sm fixed w-full top-0 z-50">
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center space-x-4">
-            <Menu className="h-6 w-6 cursor-pointer" />
+            <button 
+              onClick={() => setIsSidebarCollapsed(!isSidebarCollapsed)}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <Menu className="h-6 w-6" />
+            </button>
             <img src="/src/assets/logo.png" alt="Logo" className="h-8" />
-          </div>
-          
-          <div className="flex-1 max-w-2xl mx-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Search"
-                className="w-full px-4 py-2 rounded-full border focus:outline-none focus:border-blue-500"
-              />
-              <Search className="absolute right-3 top-2.5 h-5 w-5 text-gray-400" />
-            </div>
           </div>
 
           <div className="flex items-center space-x-4">
@@ -109,34 +102,38 @@ const HomePage = () => {
       </header>
 
       {/* Sidebar */}
-      <aside className="fixed left-0 top-14 w-64 h-full bg-white p-4 overflow-y-auto">
-        <nav className="space-y-2">
+      <aside className={`fixed left-0 top-14 h-full bg-white transition-all duration-300 ${
+        isSidebarCollapsed ? 'w-16' : 'w-64'
+      } shadow-lg`}>
+        <nav className="p-2">
           <Link to="/" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-100">
             <Home className="h-5 w-5" />
-            <span>Home</span>
+            {!isSidebarCollapsed && <span>Home</span>}
           </Link>
           <Link to="/trending" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-100">
-            <Trending className="h-5 w-5" />
-            <span>Trending</span>
+            <TrendingUp className="h-5 w-5" />
+            {!isSidebarCollapsed && <span>Trending</span>}
           </Link>
           <Link to="/subscriptions" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-100">
-            <Subscriptions className="h-5 w-5" />
-            <span>Subscriptions</span>
+            <Subscript className="h-5 w-5" />
+            {!isSidebarCollapsed && <span>Subscriptions</span>}
           </Link>
-          <hr className="my-4" />
+          <hr className="my-2" />
           <Link to="/library" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-100">
-            <VideoLibrary className="h-5 w-5" />
-            <span>Library</span>
+            <Library className="h-5 w-5" />
+            {!isSidebarCollapsed && <span>Library</span>}
           </Link>
           <Link to="/history" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-100">
             <History className="h-5 w-5" />
-            <span>History</span>
+            {!isSidebarCollapsed && <span>History</span>}
           </Link>
         </nav>
       </aside>
 
       {/* Main Content */}
-      <main className="ml-64 pt-14 p-6">
+      <main className={`pt-14 p-6 transition-all duration-300 ${
+        isSidebarCollapsed ? 'ml-16' : 'ml-64'
+      }`}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {videos.map((video) => (
             <div key={video.id} className="bg-white rounded-lg shadow overflow-hidden">
