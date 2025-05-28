@@ -8,6 +8,8 @@ import Post from "./page/Post";
 import UserList from "./component/UserList";
 import GalleryContainer from "./page/GalleryContainer";
 import AboutUs from "./page/AboutUs";
+import History from "./page/History";
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -36,6 +38,10 @@ const router = createBrowserRouter([
       {
         path: "/post",
         element: <Post />,
+      },
+      {
+        path: "/history",
+        element: <History />,
       },
     ],
   },
