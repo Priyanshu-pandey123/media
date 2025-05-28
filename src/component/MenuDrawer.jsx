@@ -1,5 +1,4 @@
-
-import { X, LogOut, User, Settings, HelpCircle, } from "lucide-react";
+import { X, LogOut, User, Settings, HelpCircle } from "lucide-react";
 import { auth } from "../utils/firebaseApp";
 import { signOut } from "firebase/auth";
 import { useNavigate, Link } from "react-router-dom";
@@ -39,6 +38,14 @@ const MenuDrawer = ({ isOpen, onClose }) => {
 
             <div className="py-4">
               <Link
+                to="/auth"
+                className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100"
+              >
+                <User size={20} className="text-gray-600" />
+                <span>Login/Register</span>
+              </Link>
+
+              <Link
                 to="/profile"
                 className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100">
                 <User size={20} className="text-gray-600" />
@@ -54,22 +61,13 @@ const MenuDrawer = ({ isOpen, onClose }) => {
                 <HelpCircle size={20} className="text-gray-600" />
                 <span>Help & Support</span>
               </button>
+
               <Link
                 to="/about-us"
                 className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100">
                 <User size={20} className="text-gray-600" />
                 <span>About Us</span>
               </Link>
-
-              <div className="border-t mt-2">
-                {/* <button
-                  onClick={handleLogout}
-                  className="w-full px-4 py-3 flex items-center space-x-3 hover:bg-gray-100 text-red-600"
-                >
-                  <LogOut size={20} />
-                  <span>Logout</span>
-                </button> */}
-              </div>
             </div>
           </div>
         </div>
