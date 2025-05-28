@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import ReactPlayer from 'react-player';
-import { Home, Trending, Subscriptions, History, VideoLibrary, Clock, ThumbsUp, Search, Menu, Bell, User } from 'lucide-react';
+import { Home, TrendingUp as Trending, Subscript as Subscriptions, History, Library as VideoLibrary, Clock, ThumbsUp, Search, Menu, Bell, User } from 'lucide-react';
 import { auth, db } from "../utils/firebaseApp";
 import { collection, addDoc } from "firebase/firestore";
 
