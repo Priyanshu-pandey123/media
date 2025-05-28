@@ -25,3 +25,4 @@ firestore.rules
 *.njsproj
 *.sln
 *.sw?
+.env
