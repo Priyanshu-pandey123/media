@@ -9,8 +9,9 @@
 }
 
 body {
+  @apply font-sans;
   margin: 0;
-  background-color: #E8E4FF;
+  background-color: #e8e4ff;
   min-height: 100vh;
 }
 

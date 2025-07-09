@@ -1,52 +1,58 @@
+import {
+  Home,
+  FileText,
+  Wrench,
+  Calendar,
+  Users,
+  CreditCard,
+  ChevronDown,
+} from "lucide-react";
+
 const Navigation = () => {
   const menuItems = [
-    { name: "Dashboard", icon: "🏠", active: true },
-    { name: "Jobs", icon: "📄", active: false },
-    { name: "Technicians", icon: "👨‍🔧", active: false },
-    { name: "Calendar", icon: "📅", active: false },
-    { name: "Customers", icon: "👥", active: false },
-    { name: "Invoices & Payments", icon: "💳", active: false },
+    { name: "Dashboard", icon: <Home size={18} />, active: true },
+    { name: "Jobs", icon: <FileText size={18} />, active: false },
+    { name: "Technicians", icon: <Wrench size={18} />, active: false },
+    { name: "Calendar", icon: <Calendar size={18} />, active: false },
+    { name: "Customers", icon: <Users size={18} />, active: false },
+    {
+      name: "Invoices & Payments",
+      icon: <CreditCard size={18} />,
+      active: false,
+    },
   ];
 
   return (
-    <nav className="bg-white shadow-sm px-8 py-4">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-8">
-          {menuItems.map((item, index) => (
-            <div
-              key={index}
-              className={`flex items-center space-x-2 px-3 py-2 rounded-lg cursor-pointer transition-all ${
-                item.active
-                  ? "text-primary-600 bg-primary-50 font-medium"
-                  : "text-gray-600 hover:text-primary-600 hover:bg-gray-50"
-              }`}
-            >
-              <span className="text-lg">{item.icon}</span>
-              <span className="text-sm">{item.name}</span>
-              {item.active && (
-                <div className="w-1 h-1 bg-primary-600 rounded-full"></div>
-              )}
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-br from-orange-400 to-orange-600 rounded-full flex items-center justify-center">
-            <span className="text-white text-sm font-medium">JD</span>
+    <nav className="bg-white px-0 py-0 rounded-t-2xl ">
+      <div className="flex items-center justify-between max-w-7xl mx-auto h-16 gap-20">
+        <div className="flex-1 flex">
+          <div className="flex flex-1 items-center justify-between">
+            {menuItems.map((item, index) => (
+              <div
+                key={index}
+                className={`flex flex-col cursor-pointer relative group `}
+              >
+                <div
+                  className={`flex items-center gap-1 transition-colors duration-150 ${
+                    item.active
+                      ? "text-blue-800 font-semibold"
+                      : "text-gray-400 font-medium group-hover:text-primary-600"
+                  }`}
+                >
+                  <span>{item.icon}</span>
+                  <span className="text-sm">{item.name}</span>
+                </div>
+              </div>
+            ))}
           </div>
-          <span className="text-gray-700 text-sm">John Doe</span>
-          <svg
-            className="w-4 h-4 text-gray-400"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
+        </div>
+        <div className="flex items-center gap-3 pr-6">
+          <img
+            src="https://randomuser.me/api/portraits/women/44.jpg"
+            alt="User Avatar"
+            className="w-9 h-9 rounded-full object-cover"
+          />
+          <ChevronDown size={18} className="text-gray-400" />
         </div>
       </div>
     </nav>
