@@ -4,8 +4,8 @@ const JobsAssigned = () => {
   const strokeDasharray = circumference;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
-  const tabs = ['Daily', 'Weekly', 'This Month'];
-  const activeTab = 'Daily';
+  const tabs = ["Daily", "Weekly", "This Month"];
+  const activeTab = "Daily";
 
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm">
@@ -17,8 +17,8 @@ const JobsAssigned = () => {
               key={tab}
               className={`px-2 py-1 rounded-md text-xs font-medium transition-colors ${
                 tab === activeTab
-                  ? 'bg-primary-600 text-white'
-                  : 'text-gray-600 hover:text-gray-800'
+                  ? "bg-primary-600 text-white"
+                  : "text-gray-600 hover:text-gray-800"
               }`}
             >
               {tab}
@@ -26,7 +26,7 @@ const JobsAssigned = () => {
           ))}
         </div>
       </div>
-      
+
       <div className="flex items-center justify-center mb-6">
         <div className="relative">
           <svg className="w-32 h-32 transform -rotate-90">
@@ -55,25 +55,31 @@ const JobsAssigned = () => {
           </svg>
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
-              <div className="text-2xl font-bold text-gray-800">{percentage}%</div>
+              <div className="text-2xl font-bold text-gray-800">
+                {percentage}%
+              </div>
               <div className="text-xs text-gray-500">This month</div>
             </div>
           </div>
         </div>
       </div>
-      
+
       <div className="flex justify-between text-center">
         <div>
           <div className="flex items-center justify-center mb-2">
             <div className="w-2 h-2 bg-primary-600 rounded-full mr-2"></div>
-            <span className="text-xs font-medium text-gray-600">Total Assigned</span>
+            <span className="text-xs font-medium text-gray-600">
+              Total Assigned
+            </span>
           </div>
           <div className="text-sm font-semibold text-gray-800">584</div>
         </div>
         <div>
           <div className="flex items-center justify-center mb-2">
             <div className="w-2 h-2 bg-gray-300 rounded-full mr-2"></div>
-            <span className="text-xs font-medium text-gray-600">Total Incoming</span>
+            <span className="text-xs font-medium text-gray-600">
+              Total Incoming
+            </span>
           </div>
           <div className="text-sm font-semibold text-gray-800">1026</div>
         </div>

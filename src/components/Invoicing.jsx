@@ -45,36 +45,10 @@ const Invoicing = () => {
   ];
 
   return (
-    <div className="bg-white rounded-xl p-6 shadow-sm">
-      <h2 className="text-lg font-semibold text-gray-800 mb-6">Invoicing</h2>
-
-      <div className="grid grid-cols-2 gap-8 mb-8">
-        <div className="space-y-4">
-          {invoiceData.map((item, index) => (
-            <div key={index} className="text-center">
-              <div className={`text-2xl font-bold ${item.color}`}>
-                {item.amount}
-              </div>
-              <div className="text-sm text-gray-600">{item.label}</div>
-            </div>
-          ))}
-        </div>
-
-        <div className="space-y-4">
-          {invoiceStats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className="text-2xl font-bold text-gray-800">
-                {stat.number}
-              </div>
-              <div className="text-xs text-gray-500">{stat.label}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
+    <div className=" rounded-xl p-6 shadow-sm">
       <div className="grid grid-cols-2 gap-4">
         {paymentCards.map((card, index) => (
-          <div key={index} className="bg-gray-50 rounded-lg p-4">
+          <div key={index} className="bg-white rounded-lg p-4">
             <div className="flex items-center justify-between mb-2">
               <span className={`text-lg font-medium ${card.color}`}>
                 {card.icon}
