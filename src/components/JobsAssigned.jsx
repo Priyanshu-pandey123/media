@@ -1,6 +1,7 @@
 const JobsAssigned = () => {
   const percentage = 58;
-  const circumference = 2 * Math.PI * 45;
+  const radius = 70;
+  const circumference = 2 * Math.PI * radius;
   const strokeDasharray = circumference;
   const strokeDashoffset = circumference - (percentage / 100) * circumference;
 
@@ -17,7 +18,7 @@ const JobsAssigned = () => {
               key={tab}
               className={`px-2 py-1 rounded-md text-xs font-medium transition-colors ${
                 tab === activeTab
-                  ? "bg-primary-600 text-white"
+                  ? "bg-violet-600 text-white"
                   : "text-gray-600 hover:text-gray-800"
               }`}
             >
@@ -29,23 +30,23 @@ const JobsAssigned = () => {
 
       <div className="flex items-center justify-center mb-6">
         <div className="relative">
-          <svg className="w-32 h-32 transform -rotate-90">
+          <svg className="w-44 h-44 transform -rotate-90" viewBox="0 0 176 176">
             {/* Background circle */}
             <circle
-              cx="64"
-              cy="64"
-              r="45"
+              cx="88"
+              cy="88"
+              r="70"
               stroke="#e5e7eb"
-              strokeWidth="8"
+              strokeWidth="12"
               fill="none"
             />
             {/* Progress circle */}
             <circle
-              cx="64"
-              cy="64"
-              r="45"
-              stroke="#3b82f6"
-              strokeWidth="8"
+              cx="88"
+              cy="88"
+              r="70"
+              stroke="#7c3aed"
+              strokeWidth="12"
               fill="none"
               strokeDasharray={strokeDasharray}
               strokeDashoffset={strokeDashoffset}
@@ -67,7 +68,7 @@ const JobsAssigned = () => {
       <div className="flex justify-between text-center">
         <div>
           <div className="flex items-center justify-center mb-2">
-            <div className="w-2 h-2 bg-primary-600 rounded-full mr-2"></div>
+            <div className="w-4 h-4 bg-violet-600 rounded-full mr-2"></div>
             <span className="text-xs font-medium text-gray-600">
               Total Assigned
             </span>
